@@ -16,13 +16,13 @@ def show_devices(_list):
         for i in range(len(_list)):
             print(f"Id: {_list[i]["device_id"]} | Name: {_list[i]["device_name"]} | Category: {_list[i]["category"]} | Status: {_list[i]["current_status"]} | Date: {_list[i]["date"]}\n")
 
-def delete_device(_list, name):
+def delete_device(_list, id):
     if not _list:
         print("There are not devices\n")
     else:
         for i in range(len(_list)):
-            if _list[i]["device_name"] == name:
+            if _list[i]["device_id"] == id:
                 _list.pop(i)
                 print("The device was sucessfully removed\n")
                 return
-        print("There are not devices with that name\n")
+        print("There are not devices with that id\n")

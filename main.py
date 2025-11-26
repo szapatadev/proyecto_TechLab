@@ -1,7 +1,4 @@
-import file_csv
-import devices
-import loans
-from datetime import date
+import file_csv, devices, loans, reports
 
 log_in_counter = 3
 user_file = "users.csv"
@@ -53,9 +50,9 @@ while log_in_counter != 0:
                                             print("----------------------Devices----------------------")
                                             devices.show_devices(devices_credentials)
                                         #--------------------------------------------------------------------------------------------------
-                                        elif sub_program == 4:
-                                            device_name = str(input("Enter the name of the device to remove: ").lower())
-                                            devices.delete_device(devices_credentials,device_name)
+                                        elif sub_program == 3:
+                                            device_id = str(input("Enter the id of the device to remove: ").lower())
+                                            devices.delete_device(devices_credentials,device_id)
                                         #--------------------------------------------------------------------------------------------------
                                         else:
                                             print("")
@@ -113,6 +110,7 @@ while log_in_counter != 0:
                                     print("Please enter a valid value\n")
                         #--------------------------------------------------------------------------------------------------
                         elif program == 4:
+                            reports.reports(devices_credentials,loans_credentials,returns_credentials)
                             while True:
                                 try:
                                     sub_program = int(input("1 - Export the monthly reports via CSV\n2 - Export the yearly reports via CSV\n3 - Quit\nWhat do you want to do? "))
@@ -121,16 +119,27 @@ while log_in_counter != 0:
                                     else:
                                         #--------------------------------------------------------------------------------------------------
                                         if sub_program == 1:
-                                            print("Something\n")
-                                        #--------------------------------------------------------------------------------------------------
+                                            month = int(input("Of what month you want to make the report, put the number of the month: "))
+                                            year = int(input("Enter the year of the month you want to make the report: "))
+                                            if (month < 1 or month > 12) or (year < 2000):
+                                                print("Please enter a valid value\n")
+                                            else:
+                                                info = reports.monthly_reports(devices_credentials,loans_credentials,returns_credentials,month,year)
+                                                print("The report was made sucessfully\n")
+                                            #--------------------------------------------------------------------------------------------------
                                         elif sub_program == 2:
-                                            print("Something\n")
+                                            year = int(input("Enter the year of the month you want to make the report: "))
+                                            if year < 2000:
+                                                print("Please enter a valid value\n")
+                                            else:
+                                                info = reports.yearly_reports(devices_credentials,loans_credentials,returns_credentials,year)
+                                                print("The report was made sucessfully\n")
                                         #--------------------------------------------------------------------------------------------------
                                         else:
                                             print("")
                                             break
                                 except:
-                                    print("Please enter a valid value\n")
+                                        print("Please enter a valid value\n")
                         else:
                             break
                 except:

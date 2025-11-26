@@ -28,7 +28,8 @@ def register_loan_application(devices_list,loans_list,id,role,user):
                     devices_list[i]["current_status"] = "borrow"
                     return
                 else:
-                    print("The divice is not avaliable\n")
+                    print("The device is not avaliable\n")
+                    return
         print("There is not any divice with that Id\n")
 
 def show_loans(loans_list):
@@ -58,8 +59,9 @@ def register_return(loans_list,loan_id,returns_list,devices_list):
                     returns_list.append({"return_id":_id,"loan_id":loan_id,"device_id":loans_list[i]["device_id"],"delay":delay,"date_return":_date,"days_borrow":days_used})
                 loans_list.pop(i)
                 devices_list[i]["current_status"] = "avaliable"
-            else:
-                print("There is not a loaned device with this id\n")
+                return
+            
+        print("There is not a loaned device with this id\n")
 
 def show_return(returns_list):
     if not returns_list:
