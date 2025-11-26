@@ -1,16 +1,15 @@
 import file_csv
 import devices
 import loans
+from datetime import date
 
 log_in_counter = 3
 user_file = "users.csv"
-devices_fiel = "devices.csv"
+devices_file = "devices.csv"
 user_credentials = []
-devices_credentials = [
-    {"device_id":"ab25a","device_name":"laptop","category":"technology","current_status":"avaliable","date":2025-11-25},
-    {"device_id":"ac48b","device_name":"laptop","category":"technology","current_status":"borrow","date":2025-11-25}
-]
+devices_credentials = []
 loans_credentials = []
+returns_credentials = []
 
 #----------------------------------------------------------------------LOGIN-------------------------------------------------------------------
 print("--------------------Log In--------------------")
@@ -37,7 +36,7 @@ while log_in_counter != 0:
                         if program == 1:
                             while True:
                                 try:
-                                    sub_program = int(input("1 - Register a new device\n2 - Show devices\n3 - See loaned/avaliable equipment\n4 - Remove a device\n5 - Quit\nWhat do you want to do? "))
+                                    sub_program = int(input("1 - Register a new device\n2 - Show devices\n3 - Remove a device\n4 - Quit\nWhat do you want to do? "))
                                     if sub_program < 1 or sub_program > 5:
                                         print("Please enter a valid value\n")
                                     else:
@@ -46,28 +45,13 @@ while log_in_counter != 0:
                                             try:
                                                 device_name = str(input("Enter the name of the new device: ").lower())
                                                 device_category = str(input("Enter the category of the new device: ").lower())
-                                                current_status = str(input("Enter the current status (Avaliable/Borrow): ").lower())
-                                                if current_status == "avaliable" or current_status == "borrow":
-                                                    devices.register_device(devices_credentials,device_name,device_category,current_status)
-                                                else:
-                                                    print("Please enter a valid value\n")
+                                                devices.register_device(devices_credentials,device_name,device_category)
                                             except:
                                                 print("Please enter a valid value\n")
                                         #--------------------------------------------------------------------------------------------------
                                         elif sub_program == 2:
                                             print("----------------------Devices----------------------")
-                                            devices.show_devices(devices_credentials,"",True)
-                                        #--------------------------------------------------------------------------------------------------
-                                        elif sub_program == 3:
-                                            _do = input("What you want to see the loaned or the avaliable devices? Loaned/Avaliable ").lower()
-                                            if _do == "loaned":
-                                                print("----------------------Loan Devices----------------------")
-                                                devices.show_devices(devices_credentials,"borrow",False)
-                                            elif _do == "avaliable":
-                                                print("----------------------Devices Avaliable----------------------")
-                                                devices.show_devices(devices_credentials,"avaliable",False)
-                                            else:
-                                                print("Please enter a valid value\n")
+                                            devices.show_devices(devices_credentials)
                                         #--------------------------------------------------------------------------------------------------
                                         elif sub_program == 4:
                                             device_name = str(input("Enter the name of the device to remove: ").lower())
@@ -82,20 +66,23 @@ while log_in_counter != 0:
                         elif program == 2:
                             while True:
                                 try:
-                                    sub_program = int(input("1 - Ask for a loan\n2 - Quit\nWhat do you want to do? "))
+                                    sub_program = int(input("1 - Ask for a loan\n2 - Show loaned devices\n3 - Quit\nWhat do you want to do? "))
                                     if sub_program < 1 or sub_program > 3:
                                         print("Please enter a valid value\n")
                                     else:
                                         #--------------------------------------------------------------------------------------------------
                                         if sub_program == 1:
-                                            devices.show_devices(devices_credentials,"",True)
-                                            _id = input("Enter the id of the book to loan: ")
-                                            _role = input("What's the role of the loaner? Student/Teacher/Admin ").lower
-                                            _user = input("What's the name of the loaner? ").lower
+                                            devices.show_devices(devices_credentials)
+                                            _id = input("Enter the id of the device to loan: ")
+                                            _role = input("What's the role of the loaner? Student/Teacher/Admin ").lower()
+                                            _user = input("What's the name of the loaner? ").lower()
                                             if _role == "student" or "teacher" or "admin":
                                                 loans.register_loan_application(devices_credentials,loans_credentials,_id,_role,_user)
                                             else:
                                                 print("Enter a valid role\n")
+                                        #--------------------------------------------------------------------------------------------------
+                                        elif sub_program == 2:
+                                            loans.show_loans(loans_credentials)
                                         #--------------------------------------------------------------------------------------------------
                                         else:
                                             print("")
@@ -112,10 +99,12 @@ while log_in_counter != 0:
                                     else:
                                         #--------------------------------------------------------------------------------------------------
                                         if sub_program == 1:
-                                            print("Something\n")
+                                            loans.show_loans(loans_credentials)
+                                            loan_id = str(input("Enter the loan id: ").lower())
+                                            loans.register_return(loans_credentials,loan_id,returns_credentials,devices_credentials)
                                         #--------------------------------------------------------------------------------------------------
                                         elif sub_program == 2:
-                                            print("Something\n")
+                                            loans.show_return(returns_credentials)
                                         #--------------------------------------------------------------------------------------------------
                                         else:
                                             print("")
