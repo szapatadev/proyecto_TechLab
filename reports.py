@@ -19,7 +19,7 @@ def monthly_reports(devices,loans,returns, month, year):
     for i in range(len(returns)):
         if month == returns[i]["date_return"].month and year == returns[i]["date_return"].year:
             returns_len += 1
-    reports_list = [devices_len,loans_len,returns_len]
+    reports_list = [{"number_devices":devices_len,"number_loans":loans_len,"number_returns":returns_len}]
     return reports_list
 
 def yearly_reports(devices,loans,returns, year):
@@ -35,5 +35,5 @@ def yearly_reports(devices,loans,returns, year):
     for i in range(len(returns)):
         if year == returns[i]["date_return"].year:
             returns_len += 1
-    reports_list = [devices_len,loans_len,returns_len]
+    reports_list = [{"number_devices":devices_len,"number_loans":loans_len,"number_returns":returns_len}]
     return reports_list

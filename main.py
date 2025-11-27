@@ -3,6 +3,9 @@ import file_csv, devices, loans, reports
 log_in_counter = 3
 user_file = "users.csv"
 devices_file = "devices.csv"
+loans_file = "loans.csv"
+returns_file = "returns.csv"
+reports_file = "reports.csv"
 user_credentials = []
 devices_credentials = []
 loans_credentials = []
@@ -21,6 +24,18 @@ while log_in_counter != 0:
         if user_credentials[i]["user"] == user_ and user_credentials[i]["password"] == password_:
             print("Sucessfully loged in\n")
             log_in_counter = 0
+
+            try:
+                file_csv.read_csv(devices_credentials,devices_file)
+                file_csv.read_csv(loans_credentials,loans_file)
+                file_csv.read_csv(returns_credentials,returns_file)
+            except FileNotFoundError:
+                file_csv.save_csv(devices_credentials,devices_file,["device_id","device_name","category","current_status","date"])
+                file_csv.save_csv(loans_credentials,loans_file,["loan_id","device_id","device_name","user","role","date","return_date"])
+                file_csv.save_csv(returns_credentials,returns_file,["return_id","loan_id","device_id","delay","date_return","days_borrow"])
+            except:
+                print("We are solving the errors\n")
+            
 #----------------------------------------------------------------------MENU-------------------------------------------------------------------
             while True:
                 try:
@@ -125,6 +140,7 @@ while log_in_counter != 0:
                                                 print("Please enter a valid value\n")
                                             else:
                                                 info = reports.monthly_reports(devices_credentials,loans_credentials,returns_credentials,month,year)
+                                                file_csv.save_csv(info,reports_file,["number_devices","number_loans","number_returns"])
                                                 print("The report was made sucessfully\n")
                                             #--------------------------------------------------------------------------------------------------
                                         elif sub_program == 2:
@@ -133,10 +149,13 @@ while log_in_counter != 0:
                                                 print("Please enter a valid value\n")
                                             else:
                                                 info = reports.yearly_reports(devices_credentials,loans_credentials,returns_credentials,year)
-                                                print("The report was made sucessfully\n")
+                                                file_csv.save_csv(info,reports_file,["number_devices","number_loans","number_returns"])
                                         #--------------------------------------------------------------------------------------------------
                                         else:
                                             print("")
+                                            file_csv.save_csv(devices_credentials,devices_file,["device_id","device_name","category","current_status","date"])
+                                            file_csv.save_csv(loans_credentials,loans_file,["loan_id","device_id","device_name","user","role","date","return_date"])
+                                            file_csv.save_csv(returns_credentials,returns_file,["return_id","loan_id","device_id","delay","date_return","days_borrow"])
                                             break
                                 except:
                                         print("Please enter a valid value\n")
